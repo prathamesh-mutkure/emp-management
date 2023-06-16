@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store";
 
 interface EmployeeState {
-  employees: string[];
+  employees: Employee[];
 }
 
 const initialState: EmployeeState = {
@@ -14,7 +14,7 @@ export const employeesSlice = createSlice({
   name: "employees",
   initialState,
   reducers: {
-    setEmployees: (state, action: PayloadAction<string[]>) => {
+    setEmployees: (state, action: PayloadAction<Employee[]>) => {
       state.employees = action.payload;
     },
   },
