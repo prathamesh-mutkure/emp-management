@@ -22,7 +22,7 @@ interface Employee {
   pincode: string;
   question: string;
   answer: string;
-  createdDate: number;
+  createdDate: string;
   lastUpdateDdate: string;
 }
 

@@ -1,9 +1,31 @@
 import { EMP_ENDPOINTS, server } from "@/constants/api-endpoints";
 import axios, { AxiosResponse } from "axios";
+import { TEST_DEPT } from "./dept-apis";
 
-export const addEmployee = async (department: Employee, token: string) => {
+export const TEST_EMP: Employee = {
+  username: "postgres",
+  password: "31113111",
+  emailid: "john@gmail.com",
+  firstname: "John",
+  lastname: "Doe",
+  mobileno: 1234567890,
+  department: TEST_DEPT,
+  city: "Pune",
+  street: "JM Road",
+  pincode: "411044",
+  question: "How is this project?",
+  answer: "Excellent",
+  type: "TYPE",
+  roles: ["employee"],
+  createdDate: "16/06/2023",
+  lastUpdateDdate: "16/06/2023",
+};
+
+export const addEmployee = async (employee: Employee, token: string) => {
   try {
-    const response = await server.post(EMP_ENDPOINTS.add, department, {
+    return true;
+
+    const response = await server.post(EMP_ENDPOINTS.add, employee, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -18,6 +40,7 @@ export const addEmployee = async (department: Employee, token: string) => {
 
 export const getEmployeeById = async (empId: number, token: string) => {
   try {
+    return TEST_EMP;
     const response = await server.get(EMP_ENDPOINTS.get, {
       params: {
         id: empId,
@@ -36,6 +59,8 @@ export const getEmployeeById = async (empId: number, token: string) => {
 
 export const getEmployeeDepartment = async (empId: number, token: string) => {
   try {
+    return TEST_DEPT;
+
     const response = await server.get(EMP_ENDPOINTS.getDept, {
       params: {
         id: empId,
@@ -57,6 +82,8 @@ export const getEmployeeByDateAndDept = async (
   deptId: number,
   token: string
 ) => {
+  return TEST_EMP;
+
   try {
     const response = await server.get(EMP_ENDPOINTS.getByDateAndDept, {
       params: {
@@ -76,6 +103,8 @@ export const getEmployeeByDateAndDept = async (
 };
 
 export const getAllEmployee = async (token: string) => {
+  return [TEST_EMP, TEST_EMP];
+
   try {
     const response = await server.get(EMP_ENDPOINTS.all, {
       headers: {
@@ -91,6 +120,7 @@ export const getAllEmployee = async (token: string) => {
 };
 
 export const updateEmployee = async (department: Department, token: string) => {
+  return true;
   try {
     const response = await server.put(EMP_ENDPOINTS.update, department, {
       headers: {
@@ -107,6 +137,7 @@ export const updateEmployee = async (department: Department, token: string) => {
 
 export const deleteEmployee = async (empId: number, token: string) => {
   try {
+    return true;
     const response = await server.delete(EMP_ENDPOINTS.delete, {
       params: { id: empId },
       headers: {
