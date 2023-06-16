@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppDispatch, useAppSelector } from "@/hooks/store-hooks";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { deleteEmployee, getAllEmployee } from "@/helper/apis/emp-apis";
 import { setEmployees } from "@/store/employee-store";
 import { Button } from "@/components/ui/button";
@@ -21,20 +21,22 @@ const AllEmployeesPage: NextPage = () => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employees);
 
-  useEffect(() => {
-    const loadEmployees = async () => {
-      const employees = await getAllEmployee("TOKEN");
-      dispatch(setEmployees(employees));
-    };
-
-    loadEmployees();
+  const loadEmployees = useCallback(async () => {
+    const employees = await getAllEmployee("TOKEN");
+    dispatch(setEmployees(employees));
   }, [dispatch]);
+
+  useEffect(() => {
+    loadEmployees();
+  }, [dispatch, loadEmployees]);
 
   const onDeleteEmployee = async (id: number) => {
     try {
       const res = await deleteEmployee(id, "TOKEN");
 
       if (res) {
+        loadEmployees();
+
         toast({
           title: "Deleted Employee",
         });
