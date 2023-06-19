@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/router";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
+import { NextPageWithLayout } from "../_app";
 
 const formSchema = z.object({
   firstname: z.string().min(1).max(50),
@@ -38,7 +40,7 @@ const formSchema = z.object({
   //   lastUpdateDdate: z.string().max(50),
 });
 
-const AddEmployeesPage: NextPage = () => {
+const AddEmployeesPage: NextPageWithLayout = () => {
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -87,7 +89,7 @@ const AddEmployeesPage: NextPage = () => {
   };
 
   return (
-    <div className="container mt-24">
+    <div className="container">
       <h1 className="text-3xl font-bold uppercase text-center my-16">
         New Employee
       </h1>
@@ -273,6 +275,10 @@ const AddEmployeesPage: NextPage = () => {
       </Form>
     </div>
   );
+};
+
+AddEmployeesPage.getLayout = function getLayout(page) {
+  return <DashboardLayout>{page}</DashboardLayout>;
 };
 
 export default AddEmployeesPage;

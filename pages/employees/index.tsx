@@ -54,7 +54,7 @@ const AllEmployeesPage: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="container mt-24">
+    <div className="container">
       <h1 className="text-3xl font-bold uppercase text-center my-16">
         Employees
       </h1>
