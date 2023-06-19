@@ -16,8 +16,10 @@ import { setEmployees } from "@/store/employee-store";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
+import { NextPageWithLayout } from "../_app";
+import DashboardLayout from "@/components/layouts/dashboard-layout";
 
-const AllEmployeesPage: NextPage = () => {
+const AllEmployeesPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employees);
 
@@ -98,6 +100,10 @@ const AllEmployeesPage: NextPage = () => {
       </Link>
     </div>
   );
+};
+
+AllEmployeesPage.getLayout = function getLayout(page) {
+  return <DashboardLayout>{page}</DashboardLayout>;
 };
 
 export default AllEmployeesPage;
