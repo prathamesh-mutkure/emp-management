@@ -29,6 +29,8 @@ import {
   Users,
   X,
   Edit,
+  UserPlus,
+  PlusCircle,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -59,6 +61,8 @@ export const Icons = {
   package: Package,
   dashboard: LayoutDashboard,
   edit: Edit,
+  userPlus: UserPlus,
+  plusCircle: PlusCircle,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
