@@ -28,6 +28,7 @@ import {
   User,
   Users,
   X,
+  Edit,
   type Icon as LucideIcon,
 } from "lucide-react";
 
@@ -57,6 +58,7 @@ export const Icons = {
   laptop: Laptop,
   package: Package,
   dashboard: LayoutDashboard,
+  edit: Edit,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

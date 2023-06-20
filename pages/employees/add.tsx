@@ -20,6 +20,10 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/router";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
 import { NextPageWithLayout } from "../_app";
+import { DashboardShell } from "@/components/shell";
+import { DashboardHeader } from "@/components/header";
+import { Icons } from "@/components/icons";
+import Link from "next/link";
 
 const formSchema = z.object({
   firstname: z.string().min(1).max(50),
@@ -89,10 +93,18 @@ const AddEmployeesPage: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="text-3xl font-bold uppercase text-center my-16">
-        New Employee
-      </h1>
+    <DashboardShell>
+      <DashboardHeader
+        heading="Add Employee"
+        text="Create and manage employees."
+      >
+        <Link href="/employees">
+          <Button variant="outline">
+            <Icons.users className="mr-2 h-4 w-4" />
+            View Employees
+          </Button>
+        </Link>
+      </DashboardHeader>
 
       <Form {...form}>
         <form
@@ -273,7 +285,7 @@ const AddEmployeesPage: NextPageWithLayout = () => {
           </Button>
         </form>
       </Form>
-    </div>
+    </DashboardShell>
   );
 };
 

@@ -18,6 +18,9 @@ import Link from "next/link";
 import { toast } from "@/components/ui/use-toast";
 import { NextPageWithLayout } from "../_app";
 import DashboardLayout from "@/components/layouts/dashboard-layout";
+import { Icons } from "@/components/icons";
+import { DashboardShell } from "@/components/shell";
+import { DashboardHeader } from "@/components/header";
 
 const AllEmployeesPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
@@ -54,10 +57,15 @@ const AllEmployeesPage: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="text-3xl font-bold uppercase text-center my-16">
-        Employees
-      </h1>
+    <DashboardShell>
+      <DashboardHeader heading="Employees" text="Create and manage employees.">
+        <Link href="/employees/add">
+          <Button variant="outline">
+            <Icons.add className="mr-2 h-4 w-4" />
+            Add Employee
+          </Button>
+        </Link>
+      </DashboardHeader>
 
       <Table>
         <TableCaption>A list of all employees.</TableCaption>
@@ -68,7 +76,7 @@ const AllEmployeesPage: NextPageWithLayout = () => {
             <TableHead>Email</TableHead>
             <TableHead>Phone No</TableHead>
             <TableHead>Department</TableHead>
-            <TableHead>Actions</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -80,25 +88,29 @@ const AllEmployeesPage: NextPageWithLayout = () => {
               <TableCell>{emp.emailid}</TableCell>
               <TableCell>{emp.mobileno}</TableCell>
               <TableCell>{emp.department.department_name}</TableCell>
-              <TableCell>
-                <Link href={`/employees/update?username=${emp.username}`}>
-                  <Button>Edit</Button>
+              <TableCell className="text-right">
+                <Link
+                  href={`/employees/update?username=${emp.username}`}
+                  className="mr-2"
+                >
+                  <Button className="rounded-full">
+                    <Icons.edit className="h-4 w-4" />
+                  </Button>
                 </Link>
 
                 {/* TODO: Fix ID */}
-                <Button onClick={() => onDeleteEmployee(0)}>Delete</Button>
+                <Button
+                  className="rounded-full"
+                  onClick={() => onDeleteEmployee(0)}
+                >
+                  <Icons.trash className="h-4 w-4" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
-      <Link href="/employees/add">
-        <Button className="my-12 mx-auto" variant="default">
-          Add Employee
-        </Button>
-      </Link>
-    </div>
+    </DashboardShell>
   );
 };
 
