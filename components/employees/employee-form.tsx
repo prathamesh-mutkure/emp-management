@@ -120,7 +120,7 @@ export function EmployeeForm({
 
   React.useEffect(() => {
     const loadEmp = async () => {
-      const empId = searchParams.get("id");
+      const empId = searchParams.get("username");
 
       if (!empId) return;
 
@@ -131,6 +131,10 @@ export function EmployeeForm({
 
       // @ts-ignore
       Object.entries(emp).forEach(([key, val]) => form.setValue(key, val));
+      form.setValue(
+        "department",
+        emp.department?.department_id ?? emp.department
+      );
 
       setIsLoading(false);
     };
@@ -319,7 +323,7 @@ export function EmployeeForm({
               )}
             />
             <Button type="submit" className="col-span-2 mt-6">
-              Submit
+              {formType === "add" ? "Add" : "Update"}
             </Button>
           </fieldset>
         </form>

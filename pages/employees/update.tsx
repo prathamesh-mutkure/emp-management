@@ -12,7 +12,7 @@ const AddEmployeesPage: NextPageWithLayout = () => {
   return (
     <DashboardShell>
       <DashboardHeader
-        heading="Add Employee"
+        heading="Update Employee"
         text="Create and manage employees."
       >
         <Link href="/employees">
@@ -23,7 +23,7 @@ const AddEmployeesPage: NextPageWithLayout = () => {
         </Link>
       </DashboardHeader>
 
-      <EmployeeForm formType="add" />
+      <EmployeeForm formType="update" />
     </DashboardShell>
   );
 };

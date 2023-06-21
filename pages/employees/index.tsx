@@ -87,7 +87,9 @@ const AllEmployeesPage: NextPageWithLayout = () => {
               <TableCell>{`${emp.firstname} ${emp.lastname}`}</TableCell>
               <TableCell>{emp.emailid}</TableCell>
               <TableCell>{emp.mobileno}</TableCell>
-              <TableCell>{emp.department.department_name}</TableCell>
+              <TableCell>
+                {emp.department?.department_name ?? emp.department}
+              </TableCell>
               <TableCell className="text-right">
                 <Link
                   href={`/employees/update?username=${emp.username}`}
