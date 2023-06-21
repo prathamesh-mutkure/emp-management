@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-// import { useAuth } from "@/context/auth-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -21,8 +20,8 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const userAuthSchema = z.object({
-  email: z.string().email(),
-  password: z.string().length(8, "Password must be of 8 characters"),
+  email: z.string().min(1),
+  password: z.string().min(8, "Password must be of 8 characters"),
 });
 
 type FormData = z.infer<typeof userAuthSchema>;
@@ -43,8 +42,6 @@ export function UserAuthForm({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [isGitHubLoading, setIsGitHubLoading] = React.useState<boolean>(false);
 
-  //   const { signIn, signUp } = useAuth();
-
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -52,18 +49,26 @@ export function UserAuthForm({
     try {
       setIsLoading(true);
 
-      //   const userCredential = await (formType === "signup"
-      //     ? signUp(data.email, data.password)
-      //     : signIn(data.email, data.password));
+      const result = await signIn("credentials", {
+        username: data.email,
+        password: data.password,
+        redirect: false,
+      });
 
-      //   console.log(userCredential);
+      console.log(result);
 
-      router.push(searchParams?.get("from") || "/employees");
+      if (result?.error) {
+        throw new Error(result.error);
+      }
+
+      if (result?.ok) {
+        router.push(searchParams?.get("from") || "/employees");
+      }
     } catch (err: any) {
       const error = err;
 
       toast({
-        title: "Failed to signin/signup",
+        title: "Failed to Signin",
         description: error.message,
         variant: "destructive",
       });
@@ -83,8 +88,8 @@ export function UserAuthForm({
               </Label>
               <Input
                 id="email"
-                placeholder="name@example.com"
-                type="email"
+                placeholder="username"
+                type="text"
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect="off"
@@ -128,35 +133,6 @@ export function UserAuthForm({
           </button>
         </div>
       </form>
-
-      {/* <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div> */}
-
-      {/* <button
-        type="button"
-        className={cn(buttonVariants({ variant: "outline" }))}
-        onClick={() => {
-          setIsGitHubLoading(true);
-          // signIn("github")
-        }}
-        // disabled={isLoading || isGitHubLoading}
-        disabled={true}
-      >
-        {isGitHubLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        Github
-      </button> */}
     </div>
   );
 }
