@@ -7,16 +7,18 @@ interface Department {
   last_update_date: string;
 }
 
+/// CREATE EMP:
+/// username, password and lastUpdateDdate are required
 interface Employee {
   firstname: string;
   lastname: string;
   username: string;
   emailid: string;
   password: string;
-  mobileno: number;
-  department: Department;
+  mobileno: number | string;
+  department?: Department | string | number;
   roles: string[];
-  type: string;
+  type?: string;
   city: string;
   street: string;
   pincode: string;

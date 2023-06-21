@@ -38,7 +38,10 @@ export const addEmployee = async (employee: Employee, token: string) => {
   }
 };
 
-export const getEmployeeById = async (empId: number, token: string) => {
+export const getEmployeeById = async (
+  empId: number | string,
+  token: string
+) => {
   try {
     return TEST_EMP;
     const response = await server.get(EMP_ENDPOINTS.get, {
