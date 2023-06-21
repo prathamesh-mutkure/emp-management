@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppDispatch, useAppSelector } from "@/hooks/store-hooks";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { deleteEmployee, getAllEmployee } from "@/helper/apis/emp-apis";
 import { setEmployees } from "@/store/employee-store";
 import { Button } from "@/components/ui/button";
@@ -21,15 +21,29 @@ import DashboardLayout from "@/components/layouts/dashboard-layout";
 import { Icons } from "@/components/icons";
 import { DashboardShell } from "@/components/shell";
 import { DashboardHeader } from "@/components/header";
+import { useSession } from "next-auth/react";
+import LayoutLoading from "@/components/layouts/loading-layout";
 
 const AllEmployeesPage: NextPageWithLayout = () => {
   const dispatch = useAppDispatch();
   const { employees } = useAppSelector((state) => state.employees);
+  const { data, status } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadEmployees = useCallback(async () => {
-    const employees = await getAllEmployee("TOKEN");
-    dispatch(setEmployees(employees));
-  }, [dispatch]);
+    if (isLoading || !data?.user.token) return;
+
+    try {
+      setIsLoading(true);
+      const employees = await getAllEmployee(data?.user.token);
+      dispatch(setEmployees(employees));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.user.token, dispatch]);
 
   useEffect(() => {
     loadEmployees();
@@ -55,6 +69,16 @@ const AllEmployeesPage: NextPageWithLayout = () => {
       });
     }
   };
+
+  if (status === "loading" || isLoading) {
+    return (
+      <LayoutLoading
+        heading="Employees"
+        text="Create and manage employees."
+        buttonLabel="Add Employee"
+      />
+    );
+  }
 
   return (
     <DashboardShell>
