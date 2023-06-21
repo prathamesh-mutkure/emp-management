@@ -3,12 +3,15 @@ import { MainNav } from "@/components/main-nav";
 import { DashboardNav } from "@/components/nav";
 import { SiteFooter } from "@/components/site-footer";
 import { UserAccountNav } from "@/components/user-account-nav";
+import { useSession } from "next-auth/react";
 
 interface DashboardLayoutProps {
   children?: React.ReactElement;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
+  const { data } = useSession();
+
   return (
     <div className="flex min-h-screen flex-col space-y-6">
       <header className="sticky top-0 z-40 border-b bg-background">
@@ -16,9 +19,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           <MainNav items={dashboardConfig.mainNav} />
           <UserAccountNav
             user={{
-              name: "user?.displayName",
-              image: "user?.photoURL",
-              email: "user?.email",
+              name: data?.user.username,
+              image: null,
+              email: null,
             }}
           />
         </div>
