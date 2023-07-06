@@ -37,6 +37,7 @@ const AllEmployeesPage: NextPageWithLayout = () => {
       setIsLoading(true);
       const employees = await getAllEmployee(data?.user.token);
       dispatch(setEmployees(employees));
+      // console.log(employees);
     } catch (e) {
       console.log(e);
     } finally {
@@ -49,14 +50,16 @@ const AllEmployeesPage: NextPageWithLayout = () => {
     loadEmployees();
   }, [dispatch, loadEmployees]);
 
-  const onDeleteEmployee = async (id: number) => {
+  const onDeleteEmployee = async (id: number | string) => {
+    if (!data?.user.token) return;
+
     try {
-      const res = await deleteEmployee(id, "TOKEN");
+      const res = await deleteEmployee(id, data?.user.token);
 
       if (res) {
         loadEmployees();
 
-        toast({
+        return toast({
           title: "Deleted Employee",
         });
       }
@@ -127,7 +130,7 @@ const AllEmployeesPage: NextPageWithLayout = () => {
                 {/* TODO: Fix ID */}
                 <Button
                   className="rounded-full"
-                  onClick={() => onDeleteEmployee(0)}
+                  onClick={() => onDeleteEmployee(emp.username)}
                 >
                   <Icons.trash className="h-4 w-4" />
                 </Button>

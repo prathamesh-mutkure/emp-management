@@ -7,7 +7,9 @@ export const server = axios.create({
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
+  maxRedirects: 5,
 });
 
 export const DEPT_ENDPOINTS = {

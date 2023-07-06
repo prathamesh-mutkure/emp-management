@@ -23,8 +23,6 @@ export const TEST_EMP: Employee = {
 
 export const addEmployee = async (employee: Employee, token: string) => {
   try {
-    return true;
-
     const response = await server.post(EMP_ENDPOINTS.add, employee, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -43,7 +41,6 @@ export const getEmployeeById = async (
   token: string
 ) => {
   try {
-    return TEST_EMP;
     const response = await server.get(EMP_ENDPOINTS.get, {
       params: {
         id: empId,
@@ -62,8 +59,6 @@ export const getEmployeeById = async (
 
 export const getEmployeeDepartment = async (empId: number, token: string) => {
   try {
-    return TEST_DEPT;
-
     const response = await server.get(EMP_ENDPOINTS.getDept, {
       params: {
         id: empId,
@@ -85,8 +80,6 @@ export const getEmployeeByDateAndDept = async (
   deptId: number,
   token: string
 ) => {
-  return TEST_EMP;
-
   try {
     const response = await server.get(EMP_ENDPOINTS.getByDateAndDept, {
       params: {
@@ -106,8 +99,6 @@ export const getEmployeeByDateAndDept = async (
 };
 
 export const getAllEmployee = async (token: string) => {
-  return [TEST_EMP, TEST_EMP];
-
   try {
     const response = await server.get(EMP_ENDPOINTS.all, {
       headers: {
@@ -117,15 +108,15 @@ export const getAllEmployee = async (token: string) => {
 
     return response.data as Employee[];
   } catch (error) {
-    console.error("Error adding department:", error);
+    console.error("Error getting employees:", error);
+
     throw error;
   }
 };
 
-export const updateEmployee = async (department: Department, token: string) => {
-  return true;
+export const updateEmployee = async (employee: Employee, token: string) => {
   try {
-    const response = await server.put(EMP_ENDPOINTS.update, department, {
+    const response = await server.put(EMP_ENDPOINTS.update, employee, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -133,14 +124,13 @@ export const updateEmployee = async (department: Department, token: string) => {
 
     return response.data as boolean;
   } catch (error) {
-    console.error("Error adding department:", error);
+    console.error("Error updating employee:", error);
     throw error;
   }
 };
 
-export const deleteEmployee = async (empId: number, token: string) => {
+export const deleteEmployee = async (empId: number | string, token: string) => {
   try {
-    return true;
     const response = await server.delete(EMP_ENDPOINTS.delete, {
       params: { id: empId },
       headers: {

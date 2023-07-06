@@ -22,7 +22,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { addEmployee, getEmployeeById } from "@/helper/apis/emp-apis";
+import {
+  addEmployee,
+  getEmployeeById,
+  updateEmployee,
+} from "@/helper/apis/emp-apis";
+import { useSession } from "next-auth/react";
 
 interface EmployeeFormProps extends React.HTMLAttributes<HTMLDivElement> {
   formType: "add" | "update";
@@ -35,7 +40,8 @@ const formSchema = z.object({
   emailid: z.string().email(),
   password: z.string().min(8).max(24),
   mobileno: z.string().min(10).max(10),
-  department: z.string().min(1).max(50),
+  // department: z.string().min(1).max(50),
+  department: z.string().max(50),
   roles: z.string().array(),
   type: z.string().max(50),
   city: z.string().max(50),
@@ -52,6 +58,8 @@ export function EmployeeForm({
   className,
   ...props
 }: EmployeeFormProps) {
+  const { data, status } = useSession();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -79,6 +87,8 @@ export function EmployeeForm({
   const router = useRouter();
 
   async function onSubmit(values: FormData) {
+    if (isLoading || !data?.user.token) return;
+
     try {
       setIsLoading(true);
 
@@ -89,7 +99,11 @@ export function EmployeeForm({
           lastUpdateDdate: formatDate(new Date()),
         };
 
-        const res = await addEmployee(newEmployee, "TOKEN");
+        // @ts-ignore
+        delete newEmployee["department"];
+        // TODO: Fix dept
+
+        const res = await addEmployee(newEmployee, data?.user.token);
 
         if (res) {
           router.replace("/employees");
@@ -103,7 +117,17 @@ export function EmployeeForm({
           lastUpdateDdate: formatDate(new Date()),
         };
 
-        console.log(newEmployee);
+        // @ts-ignore
+        delete newEmployee["department"];
+        // TODO: Fix dept
+
+        const res = await updateEmployee(newEmployee, data?.user.token);
+
+        if (res) {
+          router.replace("/employees");
+        }
+
+        router.push(searchParams?.get("from") || "/employees");
       }
     } catch (err: any) {
       const error = err;
@@ -122,19 +146,20 @@ export function EmployeeForm({
     const loadEmp = async () => {
       const empId = searchParams.get("username");
 
-      if (!empId) return;
+      if (!empId || !data?.user.token || formType === "add") return;
 
       setIsLoading(true);
-      const emp = await getEmployeeById(empId, "TOKEN");
+      const emp = await getEmployeeById(empId, data?.user.token);
 
       setEmp(emp);
 
       // @ts-ignore
       Object.entries(emp).forEach(([key, val]) => form.setValue(key, val));
-      form.setValue(
-        "department",
-        emp.department?.department_id ?? emp.department
-      );
+
+      // Empty Password
+      form.setValue("password", "");
+
+      form.setValue("department", "");
 
       setIsLoading(false);
     };
@@ -142,7 +167,7 @@ export function EmployeeForm({
     loadEmp();
 
     return () => {};
-  }, [searchParams, form]);
+  }, [searchParams, form, data?.user.token, formType]);
 
   return (
     <div className={cn("grid gap-6 px-2", className)} {...props}>
@@ -202,7 +227,11 @@ export function EmployeeForm({
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="johndoe" {...field} />
+                    <Input
+                      placeholder="johndoe"
+                      {...field}
+                      disabled={formType === "update"}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
