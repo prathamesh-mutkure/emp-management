@@ -11,7 +11,6 @@ export const TEST_DEPT: Department = {
 };
 
 export const addDepartment = async (department: Department, token: string) => {
-  return true;
   try {
     const response = await server.post(DEPT_ENDPOINTS.add, department, {
       headers: {
@@ -28,7 +27,6 @@ export const addDepartment = async (department: Department, token: string) => {
 
 export const getDepartmentById = async (deptId: number, token: string) => {
   try {
-    return TEST_DEPT;
     const response = await server.get(DEPT_ENDPOINTS.get, {
       params: {
         id: deptId,
@@ -47,8 +45,6 @@ export const getDepartmentById = async (deptId: number, token: string) => {
 
 export const getAllDepartment = async (token: string) => {
   try {
-    return [TEST_DEPT, TEST_DEPT];
-
     const response = await server.get(DEPT_ENDPOINTS.all, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -66,8 +62,6 @@ export const updateDepartment = async (
   department: Department,
   token: string
 ) => {
-  return true;
-
   try {
     const response = await server.put(DEPT_ENDPOINTS.update, department, {
       headers: {
@@ -84,7 +78,6 @@ export const updateDepartment = async (
 
 export const deleteDepartment = async (deptId: number, token: string) => {
   try {
-    return true;
     const response = await server.delete(DEPT_ENDPOINTS.delete, {
       params: { id: deptId },
       headers: {
