@@ -16,7 +16,6 @@ import { toast } from "@/components/ui/use-toast";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,6 +29,7 @@ import {
   updateDepartment,
 } from "@/helper/apis/dept-apis";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppSelector } from "@/hooks/store-hooks";
 
 interface DeptFormProps extends React.HTMLAttributes<HTMLDivElement> {
   formType: "add" | "update";
@@ -39,16 +39,13 @@ const formSchema = z.object({
   department_name: z.string().min(1).max(50),
   description: z.string().min(1).max(50),
   department_head: z.string().min(1).max(50),
-
-  //   department_id: z.string().min(1).max(50),
-  //   creation_date: z.string().min(1).max(50),
-  //   last_update_date: z.string().min(1).max(50),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 export function DeptForm({ formType, className, ...props }: DeptFormProps) {
-  const { data, status } = useSession();
+  const { departments } = useAppSelector((state) => state.departments);
+  const { data } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,19 +69,22 @@ export function DeptForm({ formType, className, ...props }: DeptFormProps) {
       setIsLoading(true);
 
       if (formType === "add") {
-        // TODO: Fix ID
+        let maxId = 0;
+
+        if (departments.length > 0) {
+          departments.forEach((dept) => {
+            if (dept.department_id > maxId) maxId = dept.department_id;
+          });
+        }
+
         const newDept: Department = {
           ...values,
-          department_id: 0,
+          department_id: maxId + 1,
           creation_date: formatDate(new Date()),
           last_update_date: formatDate(new Date()),
         };
 
-        const res = await addDepartment(newDept, data?.user.token);
-
-        if (res) {
-          router.replace("/departments");
-        }
+        await addDepartment(newDept, data?.user.token);
 
         router.push(searchParams?.get("from") || "/departments");
       } else {
@@ -95,11 +95,7 @@ export function DeptForm({ formType, className, ...props }: DeptFormProps) {
           last_update_date: formatDate(new Date()),
         };
 
-        const res = await updateDepartment(newDept, data?.user.token);
-
-        if (res) {
-          router.replace("/departments");
-        }
+        await updateDepartment(newDept, data?.user.token);
 
         router.push(searchParams?.get("from") || "/departments");
       }
@@ -162,7 +158,7 @@ export function DeptForm({ formType, className, ...props }: DeptFormProps) {
               name="department_head"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel>Dept Head</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>

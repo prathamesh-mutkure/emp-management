@@ -62,9 +62,9 @@ const AllEmployeesPage: NextPageWithLayout = () => {
         return toast({
           title: "Deleted Employee",
         });
+      } else {
+        throw Error("Failed to delete employee");
       }
-
-      throw Error("Failed to delete employee");
     } catch (e) {
       console.log(e);
       toast({

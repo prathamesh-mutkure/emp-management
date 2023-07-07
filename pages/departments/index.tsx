@@ -62,9 +62,9 @@ const AllDeptPage: NextPageWithLayout = () => {
         return toast({
           title: "Deleted Depts",
         });
+      } else {
+        throw Error("Failed to delete departments");
       }
-
-      throw Error("Failed to delete departments");
     } catch (e) {
       console.log(e);
       toast({
