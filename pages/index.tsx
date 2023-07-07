@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { GetServerSideProps } from "next";
+import { getServerSession } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -118,7 +119,18 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // const session = await getServerSession(context.req);
+
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: "/login",
+  //     },
+  //     props: {},
+  //   };
+  // }
+
   return {
     redirect: {
       destination: "/login",

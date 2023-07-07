@@ -99,7 +99,7 @@ const AllEmployeesPage: NextPageWithLayout = () => {
         <TableHeader>
           <TableRow>
             <TableHead>Username</TableHead>
-            <TableHead>Method</TableHead>
+            <TableHead>Full Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Phone No</TableHead>
             <TableHead>Department</TableHead>

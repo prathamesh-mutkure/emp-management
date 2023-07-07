@@ -4,13 +4,22 @@ import { DashboardNav } from "@/components/nav";
 import { SiteFooter } from "@/components/site-footer";
 import { UserAccountNav } from "@/components/user-account-nav";
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 interface DashboardLayoutProps {
   children?: React.ReactElement;
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { data } = useSession();
+  const { data, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/login");
+    }
+  }, [status, router]);
 
   return (
     <div className="flex min-h-screen flex-col space-y-6">
