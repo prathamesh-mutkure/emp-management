@@ -18,9 +18,12 @@ export const addDepartment = async (department: Department, token: string) => {
       },
     });
 
-    return response.data as boolean;
+    if (response.status === 201) {
+      return response.data as boolean;
+    }
+
+    throw new Error(response.data);
   } catch (error) {
-    console.error("Error adding department:", error);
     throw error;
   }
 };

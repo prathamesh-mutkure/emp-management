@@ -84,7 +84,9 @@ export function DeptForm({ formType, className, ...props }: DeptFormProps) {
           last_update_date: formatDate(new Date()),
         };
 
-        await addDepartment(newDept, data?.user.token);
+        const res = await addDepartment(newDept, data?.user.token);
+
+        console.log(res);
 
         router.push(searchParams?.get("from") || "/departments");
       } else {
@@ -104,7 +106,7 @@ export function DeptForm({ formType, className, ...props }: DeptFormProps) {
 
       toast({
         title: "Failed add/update department",
-        description: error.message,
+        description: `${error.message}, make sure all info is unique`,
         variant: "destructive",
       });
     } finally {
